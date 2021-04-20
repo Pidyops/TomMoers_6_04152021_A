@@ -1,5 +1,6 @@
 
 const Sauce = require('../models/sauces');
+const fs = require ('fs');
 
 
 exports.createSauce = (req, res, next) => { // create a thing in the database. any file that import ouf stuff controller, will be able to acess it
@@ -45,7 +46,8 @@ Sauce.findOne({ //request the model Thing
 }).then( //return a promess
     (sauce) => { // witht hte data called thing
     res.status(200).json(sauce);
-    }
+    },
+    console.log('single page sauce')
 ).catch( // set up the error block
     (error) => {
     res.status(404).json({
@@ -53,6 +55,61 @@ Sauce.findOne({ //request the model Thing
     });
     }
 );
+};
+
+
+exports.addLike = (req, res, next) => {
+  let sauce = new Sauce({ _id: req.params._id });
+  if(req.file) { // if there is a new file
+    const url = req.protocol + '://' + req.get('host');
+    req.body.sauce = JSON.parse(req.body.sauce); // req.body.sauce is a string and the form is an object, so we'll turn it into a json object
+    sauce = { 
+        _id: req.params.id, // because it is a new thing, it will have a new ID. we then tell to keep the old id, which is in the parameters
+        userId: req.body.sauce.userId,
+        name: req.body.sauce.name,
+        manufacturer: req.body.sauce.manufacturer,
+        description: req.body.sauce.description,
+        mainPepper: req.body.sauce.mainPepper,
+        imageUrl: url + '/images/' + req.file.filename,
+        // imageUrl: req.body.imageUrl,
+        heat: req.body.sauce.heat,
+        likes: req.body.sauce.likes,
+        dislikes: req.body.sauce.dislikes,
+        usersLiked: req.body.sauce.usersLiked,
+        usersDisliked: req.body.sauce.usersDisliked,
+    };
+    console.log(sauce);
+  } else { // or with an existing file
+    sauce = { // create the new data that will replace the precedent one
+      _id: req.params.id, // because it is a new thing, it will have a new ID. we then tell to keep the old id, which is in the parameters
+      userId: req.body.userId,
+      name: req.body.name,
+      manufacturer: req.body.manufacturer,
+      description: req.body.description,
+      mainPepper: req.body.mainPepper,
+      imageUrl: req.body.imageUrl,
+      heat: req.body.heat,
+      likes: req.body.likes,
+      dislikes: req.body.dislikes,
+      usersLiked: req.body.usersLiked,
+      usersDisliked: req.body.usersDisliked,
+    };
+  }
+  console.log(sauce);
+  Sauce.updateOne({_id: req.params.id}, sauce).then( // update an existing thing. as argument {the thing we want to update (id will be the same as in the parameter)}, the new thing that will replce the old one
+      () => {
+      res.status(201).json({
+          message: 'Sauce update successfully'
+      });
+      },
+      console.log(sauce)
+  ).catch(
+      (error) => {
+      res.status(400).json({
+          error: error
+      });
+      }
+  );
 };
 
 exports.getAllSauces = (req, res, next) => { //add api end point
@@ -71,42 +128,90 @@ Sauce.find().then( //use the Thing model and use the find method. It returns pro
 
 
 
-// exports.modifySauces = (req, res, next) => {
-//     const sauces = new Sauces({ // create the new data that will replace the precedent one
-//         _id: req.params.id, // because it is a new thing, it will have a new ID. we then tell to keep the old id, which is in the parameters
-//         title:req.body.title,
-//         description: req.body.description,
-//         imageUrl: req.body.imageUrl,
-//         price: req.body.price,
-//         userId: req.body.userId
-//     });
-//     Sauces.updateOne({_id: req.params.id}, thing).then( // update an existing thing. as argument {the thing we want to update (id will be the same as in the parameter)}, the new thing that will replce the old one
-//         () => {
-//         res.status(201).json({
-//             message: 'Thing update successfully'
-//         });
-//         }
-//     ).catch(
-//         (error) => {
-//         res.status(400).json({
-//             error: error
-//         });
-//         }
-//     );
-//     };
+exports.modifySauce = (req, res, next) => {
+  console.log('hello');
+  let sauce = new Sauce({ _id: req.params._id });
+  if(req.file) { // if there is a new file
+    const url = req.protocol + '://' + req.get('host');
+    req.body.sauce = JSON.parse(req.body.sauce); // req.body.sauce is a string and the form is an object, so we'll turn it into a json object
+    sauce = { 
+        _id: req.params.id, // because it is a new thing, it will have a new ID. we then tell to keep the old id, which is in the parameters
+        userId: req.body.sauce.userId,
+        name: req.body.sauce.name,
+        manufacturer: req.body.sauce.manufacturer,
+        description: req.body.sauce.description,
+        mainPepper: req.body.sauce.mainPepper,
+        imageUrl: url + '/images/' + req.file.filename,
+        // imageUrl: req.body.imageUrl,
+        heat: req.body.sauce.heat,
+        likes: req.body.sauce.likes,
+        dislikes: req.body.sauce.dislikes,
+        usersLiked: req.body.sauce.usersLiked,
+        usersDisliked: req.body.sauce.usersDisliked,
+    };
+    // console.log(sauce)
+    console.log("1")
+    console.log(sauce);
 
-// exports.deleteThing = (req, res, next) => {
-//     Thing.deleteOne({ _id: req.params.id}).then( //we use the Thing model and the methode deleteOne() with ther params: _id and req.params.id // then we get a promess back
-//         () => {
-//         res.status(200).json({
-//             message: 'Deleted'
-//         });
-//         }
-//     ).catch(
-//         (error) => {
-//         res.status(400).json({
-//             error: error
-//         });
-//         }
-//     );
-//     };
+
+  } else { // or with an existing file
+    console.log(sauce);
+    sauce = { // create the new data that will replace the precedent one
+      _id: req.params.id, // because it is a new thing, it will have a new ID. we then tell to keep the old id, which is in the parameters
+      userId: req.body.userId,
+      name: req.body.name,
+      manufacturer: req.body.manufacturer,
+      description: req.body.description,
+      mainPepper: req.body.mainPepper,
+      imageUrl: sauce.imageUrl,
+      heat: req.body.heat,
+      likes: req.body.likes,
+      dislikes: req.body.dislikes,
+      usersLiked: req.body.usersLiked,
+      usersDisliked: req.body.usersDisliked,
+    };
+      // console.log(sauce)
+      console.log("2");
+      console.log(sauce);
+      // console.log(req.body)
+  }
+
+
+  Sauce.updateOne({_id: req.params.id}, sauce).then( // update an existing thing. as argument {the thing we want to update (id will be the same as in the parameter)}, the new thing that will replce the old one
+      () => {
+      res.status(201).json({
+          message: 'Sauce update successfully'
+      });
+      }
+
+  ).catch(
+      (error) => {
+      res.status(400).json({
+          error: error
+      });
+      }
+  );
+};
+
+exports.deleteSauce = (req, res, next) => { //when click on delete
+  Sauce.findOne({_id: req.params.id}).then( // get access to the sauce in the database
+    (sauce) => { filename = sauce.imageUrl.split('/images/')[1]; //we receive promess //all our url contain images/ (first part protocol and host name and second our file name
+      fs.unlink('images/' + filename, () => {  //delete the file with fs package we use unlink function (argument: path to the file to delete, callback )
+        Sauce.deleteOne({ _id: req.params.id}).then( //we delete in the database
+        () => {
+        res.status(200).json({ 
+            message: 'Deleted'
+        });
+        }
+    ).catch(
+        (error) => {
+        res.status(400).json({
+            error: error
+        });
+        }
+    );
+    })
+    }
+  );
+
+};
