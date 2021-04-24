@@ -15,12 +15,11 @@ exports.createSauce = (req, res, next) => { // create a thing in the database. a
       description: req.body.sauce.description,
       mainPepper: req.body.sauce.mainPepper,
       imageUrl: url + '/images/' + req.file.filename,
-      // imageUrl: req.body.imageUrl,
       heat: req.body.sauce.heat,
-      likes: req.body.sauce.likes,
-      dislikes: req.body.sauce.dislikes,
-      usersLiked: req.body.sauce.usersLiked,
-      usersDisliked: req.body.sauce.usersDisliked,
+      likes: 0,
+      dislikes: 0,
+      usersLiked: [],
+      usersDisliked: [],
   });
   console.log('sauce' + sauce); 
 	sauce.save().then( //allow to save thing to the data base .then: it return a promess
@@ -59,51 +58,41 @@ Sauce.findOne({ //request the model Thing
 
 
 exports.addLike = (req, res, next) => {
+  console.log("Post Like/dislike");
+
   let sauce = new Sauce({ _id: req.params._id });
-  // if(req.file) { // if there is a new file
-    const url = req.protocol + '://' + req.get('host');
-    console.log('url', url)
-    req.body.sauce = JSON.parse(req.body.sauce); // req.body.sauce is a string and the form is an object, so we'll turn it into a json object
-    sauce = { 
-        _id: req.params.id, // because it is a new thing, it will have a new ID. we then tell to keep the old id, which is in the parameters
-        userId: req.body.sauce.userId,
-        name: req.body.sauce.name,
-        manufacturer: req.body.sauce.manufacturer,
-        description: req.body.sauce.description,
-        mainPepper: req.body.sauce.mainPepper,
-        imageUrl: url + '/images/' + req.file.filename,
-        // imageUrl: req.body.imageUrl,
-        heat: req.body.sauce.heat,
-        likes: req.body.sauce.likes,
-        dislikes: req.body.sauce.dislikes,
-        usersLiked: req.body.sauce.usersLiked,
-        usersDisliked: req.body.sauce.usersDisliked,
+  console.log("sauce:", sauce);
+  console.log('req.body', req.body)
+  if(req.body.like > 0) { // if we receive an image
+    // req.body.sauce = JSON.parse(req.body.sauce); // req.body.sauce is a string and the form is an object, so we'll turn it into a json object
+
+   // just update de json data (without new image file)
+    sauce = { // create the new data that will replace the precedent one
+      _id: req.params.id, // because it is a new thing, it will have a new ID. we then tell to keep the old id, which is in the parameters
+      likes: req.body.like,
+      usersLiked: req.body.userId,
+
     };
-    console.log(sauce);
-  // } else { // or with an existing file
-    // sauce = { // create the new data that will replace the precedent one
-    //   _id: req.params.id, // because it is a new thing, it will have a new ID. we then tell to keep the old id, which is in the parameters
-    //   userId: req.body.userId,
-    //   name: req.body.name,
-    //   manufacturer: req.body.manufacturer,
-    //   description: req.body.description,
-    //   mainPepper: req.body.mainPepper,
-    //   imageUrl: req.body.imageUrl,
-    //   heat: req.body.heat,
-    //   likes: req.body.likes,
-    //   dislikes: req.body.dislikes,
-    //   usersLiked: req.body.usersLiked,
-    //   usersDisliked: req.body.usersDisliked,
-    // };
-  // }
-  console.log(sauce);
+      console.log("Post Like -- if");
+      console.log("sauce:", sauce);
+      console.log('req.body', req.body)
+  } else {
+    sauce = { // create the new data that will replace the precedent one
+      _id: req.params.id, // because it is a new thing, it will have a new ID. we then tell to keep the old id, which is in the parameters
+      dislikes: req.body.like,
+      usersDisliked: req.body.userId,
+  }
+}
+  console.log("Post dislike -- else");
+  console.log("sauce:", sauce);
+  console.log('req.body', req.body)
   Sauce.updateOne({_id: req.params.id}, sauce).then( // update an existing thing. as argument {the thing we want to update (id will be the same as in the parameter)}, the new thing that will replce the old one
       () => {
       res.status(201).json({
           message: 'Sauce update successfully'
       });
-      },
-      console.log(sauce)
+      }
+
   ).catch(
       (error) => {
       res.status(400).json({
@@ -132,10 +121,10 @@ Sauce.find().then( //use the Thing model and use the find method. It returns pro
 exports.modifySauce = (req, res, next) => {
   console.log('controller put');
   let sauce = new Sauce({ _id: req.params._id });
-  const url = req.protocol + '://' + req.get('host');
-  console.log('url', url)
-  
+
   if(req.file) { // if we receive an image
+    const url = req.protocol + '://' + req.get('host');
+    console.log('url', url)
     req.body.sauce = JSON.parse(req.body.sauce); // req.body.sauce is a string and the form is an object, so we'll turn it into a json object
     sauce = { 
         _id: req.params.id, // because it is a new thing, it will have a new ID. we then tell to keep the old id, which is in the parameters
@@ -145,28 +134,19 @@ exports.modifySauce = (req, res, next) => {
         description: req.body.sauce.description,
         mainPepper: req.body.sauce.mainPepper,
         imageUrl: url + '/images/' + req.file.filename,
-        // imageUrl: req.body.imageUrl,
         heat: req.body.sauce.heat,
-        likes: req.body.sauce.likes,
-        dislikes: req.body.sauce.dislikes,
-        usersLiked: req.body.sauce.usersLiked,
-        usersDisliked: req.body.sauce.usersDisliked,
+        // likes: req.body.sauce.likes,
+        // dislikes: req.body.sauce.dislikes,
+        // usersLiked: req.body.sauce.usersLiked,
+        // usersDisliked: req.body.sauce.usersDisliked,
     };
     // console.log(sauce)
     console.log("put: if part")
     console.log("sauce", sauce);
-    console.log("sauce.imageUrl", sauce.imageUrl)
-    // console.log('url + /images/', sauce.imageUrl)
     console.log('req.body', req.body)
     console.log('req.file', req.file)
 
-
-
   } else { // just update de json data (without new image file)
-    console.log('starting else')
-    console.log('req.body', req.body)
-    
-    console.log('sauce', sauce);
     sauce = { // create the new data that will replace the precedent one
       _id: req.params.id, // because it is a new thing, it will have a new ID. we then tell to keep the old id, which is in the parameters
       userId: req.body.userId,
@@ -175,22 +155,16 @@ exports.modifySauce = (req, res, next) => {
       description: req.body.description,
       mainPepper: req.body.mainPepper,
       heat: req.body.heat,
-      likes: req.body.likes,
-      dislikes: req.body.dislikes,
-      usersLiked: req.body.usersLiked,
-      usersDisliked: req.body.usersDisliked,
+      // likes: req.body.likes,
+      // dislikes: req.body.dislikes,
+      // usersLiked: req.body.usersLiked,
+      // usersDisliked: req.body.usersDisliked,
     };
-      // console.log(sauce)
       console.log("put: else part");
       console.log("sauce:", sauce);
-      // console.log(req.body)
-      // console.log("sauce+/image/sauce.url", url + '/images/' + sauce.imageUrl)
       console.log('req.body', req.body)
       console.log('req.file', req.file)
-
   }
-
-
   Sauce.updateOne({_id: req.params.id}, sauce).then( // update an existing thing. as argument {the thing we want to update (id will be the same as in the parameter)}, the new thing that will replce the old one
       () => {
       res.status(201).json({
