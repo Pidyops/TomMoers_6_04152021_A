@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
         const stringName = JSON.stringify(name);
         const extension = MIME_TYPE[file.mimetype]; // file extension
         // callback(null, name + Date.now() + '.' + extension); //say how we name the image. (we add date to avoid doublon)
-        callback(null, name); //say how we name the image. (we add date to avoid doublon)
+        callback(null, Date.now() + '--' + name); //say how we name the image. (we add date to avoid doublon)
         // callback(null, name);
     }
 })

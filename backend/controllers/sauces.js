@@ -42,7 +42,7 @@ exports.createSauce = (req, res, next) => { // create a thing in the database. a
 
 exports.getOneSauce = (req, res, next) => { //: tells that this parameter will be dynamic
 Sauce.findOne({ //request the model Thing
-    _id: req.params.id //id because the id of the end point of the API
+    _id: req.params.id//id because the id of the end point of the API
 }).then( //return a promess
     (sauce) => { // witht hte data called thing
     res.status(200).json(sauce);
@@ -136,7 +136,6 @@ exports.modifySauce = (req, res, next) => {
   console.log('url', url)
   
   if(req.file) { // if we receive an image
-
     req.body.sauce = JSON.parse(req.body.sauce); // req.body.sauce is a string and the form is an object, so we'll turn it into a json object
     sauce = { 
         _id: req.params.id, // because it is a new thing, it will have a new ID. we then tell to keep the old id, which is in the parameters
@@ -156,16 +155,18 @@ exports.modifySauce = (req, res, next) => {
     // console.log(sauce)
     console.log("put: if part")
     console.log("sauce", sauce);
-    console.log("imageUrl".imageUrl)
-    console.log('url + /images/', sauce.imageUrl)
+    console.log("sauce.imageUrl", sauce.imageUrl)
+    // console.log('url + /images/', sauce.imageUrl)
     console.log('req.body', req.body)
     console.log('req.file', req.file)
 
 
 
   } else { // just update de json data (without new image file)
+    console.log('starting else')
+    console.log('req.body', req.body)
     
-    console.log(sauce);
+    console.log('sauce', sauce);
     sauce = { // create the new data that will replace the precedent one
       _id: req.params.id, // because it is a new thing, it will have a new ID. we then tell to keep the old id, which is in the parameters
       userId: req.body.userId,
@@ -173,9 +174,6 @@ exports.modifySauce = (req, res, next) => {
       manufacturer: req.body.manufacturer,
       description: req.body.description,
       mainPepper: req.body.mainPepper,
-      // imageUrl: req.body.imageUrl,
-      // imageUrl: req.file,
-      imageUrl: url + '/images/' + sauce.imageUrl,
       heat: req.body.heat,
       likes: req.body.likes,
       dislikes: req.body.dislikes,
