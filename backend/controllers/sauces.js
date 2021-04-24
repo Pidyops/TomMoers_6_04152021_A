@@ -155,8 +155,8 @@ exports.modifySauce = (req, res, next) => {
     };
     // console.log(sauce)
     console.log("put: if part")
-    console.log(sauce);
-    console.log(sauce.imageUrl)
+    console.log("sauce", sauce);
+    console.log("imageUrl".imageUrl)
     console.log('url + /images/', sauce.imageUrl)
     console.log('req.body', req.body)
     console.log('req.file', req.file)
