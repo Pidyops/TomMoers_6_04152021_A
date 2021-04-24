@@ -16,8 +16,6 @@ const storage = multer.diskStorage({
     filename: (req, file, callback) => { //file name function
         const name = file.originalname.split(' ').join('_'); // keep the original name without any space error
         const stringName = JSON.stringify(name);
-        typeof(name);
-        typeof(stringName);
         const extension = MIME_TYPE[file.mimetype]; // file extension
         // callback(null, name + Date.now() + '.' + extension); //say how we name the image. (we add date to avoid doublon)
         callback(null, name); //say how we name the image. (we add date to avoid doublon)
