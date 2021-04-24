@@ -59,34 +59,43 @@ Sauce.findOne({ //request the model Thing
 
 exports.addLike = (req, res, next) => {
   console.log("Post Like/dislike");
-
   let sauce = new Sauce({ _id: req.params._id });
   console.log("sauce:", sauce);
   console.log('req.body', req.body)
-  if(req.body.like > 0) { // if we receive an image
-    // req.body.sauce = JSON.parse(req.body.sauce); // req.body.sauce is a string and the form is an object, so we'll turn it into a json object
-
-   // just update de json data (without new image file)
-    sauce = { // create the new data that will replace the precedent one
-      _id: req.params.id, // because it is a new thing, it will have a new ID. we then tell to keep the old id, which is in the parameters
-      likes: req.body.like,
+  if(req.body.like == 1) {
+    sauce = {
+      _id: req.params.id, 
+      likes: 1,
       usersLiked: req.body.userId,
 
     };
       console.log("Post Like -- if");
       console.log("sauce:", sauce);
       console.log('req.body', req.body)
+  } else if (req.body.like == 0) {
+    sauce = {
+      _id: req.params.id, 
+      likes: 0,
+      dislikes: 0,
+    };
+    console.log("Post == 0 -- else if")
   } else {
-    sauce = { // create the new data that will replace the precedent one
-      _id: req.params.id, // because it is a new thing, it will have a new ID. we then tell to keep the old id, which is in the parameters
-      dislikes: req.body.like,
+    sauce = { 
+      _id: req.params.id, 
+      dislikes: 1,
       usersDisliked: req.body.userId,
   }
-}
   console.log("Post dislike -- else");
   console.log("sauce:", sauce);
-  console.log('req.body', req.body)
-  Sauce.updateOne({_id: req.params.id}, sauce).then( // update an existing thing. as argument {the thing we want to update (id will be the same as in the parameter)}, the new thing that will replce the old one
+  console.log('req.body', req.body);
+  
+}
+  console.log("result");
+  console.log('likes', sauce.likes);
+  console.log('dislike', sauce.dislikes);
+
+
+  Sauce.updateOne({_id: req.params.id}, sauce).then(
       () => {
       res.status(201).json({
           message: 'Sauce update successfully'
