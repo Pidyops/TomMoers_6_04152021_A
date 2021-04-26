@@ -3,7 +3,10 @@ const bodyParser = require('body-parser'); //import access to body parser (make 
 const app = express(); // create the app
 const mongoose = require('mongoose'); // import mongoose (in app.js)
 const path = require('path'); // for displaying image
+// const expressValidator = require('express-validator')
+// const {check, validationResult}= require('express-validator');
 
+// const urlencodeParser= bodyParser.urlencoded({ extended:false});
 const User = require('./models/user'); // import mongoose model
 const userRoutes = require('./routes/user'); // get our route user.js file
 const saucesRoutes = require('./routes/sauces'); 
@@ -30,6 +33,7 @@ app.use((req, res, next) => { //piece of middle-ware
 
 app.use(bodyParser.json()); // convert the body to a usable json object
 
+// app.use(expressValidator())
 
 // app.post('/api/stuff',(req, res, next) => {
 // console.log(req.body); //get the response
@@ -37,6 +41,9 @@ app.use(bodyParser.json()); // convert the body to a usable json object
 // message: 'Thing created successfully!'
 // });
 // });
+
+
+
 
 app.use('/images', express.static(path.join(__dirname, 'images'))); // how to handle request that is going to /images
 

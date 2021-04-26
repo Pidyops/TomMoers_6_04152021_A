@@ -66,8 +66,9 @@ exports.addLike = (req, res, next) => {
     sauce = {
       _id: req.params.id, 
       likes: 1,
-      usersLiked: req.body.userId,
-
+      $addToSet: { // add only if value does not exist. (contrairly to push)
+        usersLiked: req.body.userId
+      }
     };
       console.log("Post Like -- if");
       console.log("sauce:", sauce);
@@ -77,13 +78,19 @@ exports.addLike = (req, res, next) => {
       _id: req.params.id, 
       likes: 0,
       dislikes: 0,
+      $pull: { // add only if value does not exist. (contrairly to push)
+        usersLiked: req.body.userId,
+        usersDisliked: req.body.userId,
+      }
     };
     console.log("Post == 0 -- else if")
   } else {
     sauce = { 
       _id: req.params.id, 
       dislikes: 1,
-      usersDisliked: req.body.userId,
+      $addToSet: { // add only if value does not exist. (contrairly to push)
+        usersDisliked: req.body.userId
+      }
   }
   console.log("Post dislike -- else");
   console.log("sauce:", sauce);
