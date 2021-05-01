@@ -2,7 +2,9 @@
 const Sauce = require('../models/sauces');
 const fs = require ('fs');
 
-
+// @desc      Create Sauce
+// @route     POST /api/sauces
+// @access    User
 exports.createSauce = (req, res, next) => { // create a thing in the database. any file that import ouf stuff controller, will be able to acess it
   //because of image, the request will be in different format on request
   const url = req.protocol + '://' + req.get('host');
@@ -39,6 +41,10 @@ exports.createSauce = (req, res, next) => { // create a thing in the database. a
 	);
   };
 
+
+// @desc      Get one Sauce
+// @route     POST /api/sauces/:id
+// @access    User
 exports.getOneSauce = (req, res, next) => { //: tells that this parameter will be dynamic
 Sauce.findOne({ //request the model Thing
     _id: req.params.id//id because the id of the end point of the API
@@ -56,7 +62,9 @@ Sauce.findOne({ //request the model Thing
 );
 };
 
-
+// @desc      Like
+// @route     POST /api/sauces/:id/like
+// @access    User
 exports.addLike = (req, res, next) => {
   console.log("Post Like/dislike");
   let sauce = new Sauce({ _id: req.params._id });
@@ -118,7 +126,13 @@ exports.addLike = (req, res, next) => {
   );
 };
 
+
+
+// @desc      Get all Sauces
+// @route     GET /api/sauces
+// @access    User
 exports.getAllSauces = (req, res, next) => { //add api end point
+  
 Sauce.find().then( //use the Thing model and use the find method. It returns promess
     (sauces) => { //then we receive our data
     res.status(200).json(sauces); // send back status of 200 and a json containing our things
@@ -133,7 +147,9 @@ Sauce.find().then( //use the Thing model and use the find method. It returns pro
 };
 
 
-
+// @desc      Modify Sauce
+// @route     PUT /api/sauces/:id
+// @access    User owner
 exports.modifySauce = (req, res, next) => {
   console.log('controller put');
   let sauce = new Sauce({ _id: req.params._id });
@@ -197,6 +213,9 @@ exports.modifySauce = (req, res, next) => {
   );
 };
 
+// @desc      Delete Sauce
+// @route     DELETE /api/sauces/:id
+// @access    User owner
 exports.deleteSauce = (req, res, next) => { //when click on delete
   Sauce.findOne({_id: req.params.id}).then( // get access to the sauce in the database
     (sauce) => { filename = sauce.imageUrl.split('/images/')[1]; //we receive promess //all our url contain images/ (first part protocol and host name and second our file name

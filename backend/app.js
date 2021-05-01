@@ -1,25 +1,42 @@
+
+
 const express = require('express'); //import express (import framework)
+const dotenv = require ('dotenv');
 const bodyParser = require('body-parser'); //import access to body parser (make the post api possible)
-const app = express(); // create the app
 const mongoose = require('mongoose'); // import mongoose (in app.js)
 const path = require('path'); // for displaying image
-// const expressValidator = require('express-validator')
-// const {check, validationResult}= require('express-validator');
-
-// const urlencodeParser= bodyParser.urlencoded({ extended:false});
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 const User = require('./models/user'); // import mongoose model
 const userRoutes = require('./routes/user'); // get our route user.js file
 const saucesRoutes = require('./routes/sauces'); 
+const connectDB = require('./config/db');
+
+
+// Load env vars
+dotenv.config({ path: './config/config.env'});
+
+// Connect to database
+connectDB();
+
+
+const app = express(); // create the app
 
 // <><><><><><><>  connect to Mongoose  <><><><><><><>
-mongoose.connect('mongodb+srv://Tom:R8Bs17QGWr2JHpMD@cluster0.f9gcj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
-.then(() => {
-console.log("successfully connected to MOngoDb Atlas");
-})
-.catch((error) => {
-console.log('unable to connect to MongoDB Atlas');
-console.error(error);
-})
+// db.connect({
+// 	mongooseKey: process.env.DB_KEY,
+//   })
+
+// mongoose.connect(MONGO_URI)
+// .then(() => {
+// console.log("successfully connected to MOngoDb Atlas");
+// })
+// .catch((error) => {
+// console.log('unable to connect to MongoDB Atlas');
+// console.error(error);
+// })
 
 
 // <><><><><><><>  CORS converese localhost  <><><><><><><>
@@ -31,7 +48,9 @@ app.use((req, res, next) => { //piece of middle-ware
 });
 
 
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json()); // convert the body to a usable json object
+
 
 // app.use(expressValidator())
 
@@ -41,6 +60,26 @@ app.use(bodyParser.json()); // convert the body to a usable json object
 // message: 'Thing created successfully!'
 // });
 // });
+
+// Sanitizing data
+app.use(mongoSanitize());
+
+// Set security headers
+app.use(helmet());
+
+// Prevent xss (cross site scripting) attacks
+app.use(xss());
+
+// Rate limiting
+const limiter = rateLimit({
+	windowMs: 10 * 60 * 1000, //10 mins
+	max: 100
+});
+
+
+
+app.use(limiter);
+
 
 
 
