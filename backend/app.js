@@ -48,7 +48,7 @@ app.use((req, res, next) => { //piece of middle-ware
 });
 
 
-app.use(bodyParser.urlencoded({extended: true}));
+// app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json()); // convert the body to a usable json object
 
 
