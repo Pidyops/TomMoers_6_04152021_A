@@ -1,21 +1,41 @@
-# TomMoers_6_04152021_A
+# Project 6: Open Classrooms
 
-Open Classrooms: project 6 - web development path
+Welcome to my project 6
 
-frontend:
-git repo: https://github.com/OpenClassrooms-Student-Center/Web-Developer-P6.git
+> git repo: https://github.com/Pidyops/TomMoers_6_04152021_A.git
 
-backend:
-git repo: https://github.com/Pidyops/TomMoers_6_04152021_A.git
+## Backend
 
-set-up:
-From terminal:
-Web-Developer-P6:
-npm i (only the first time)
+### Usage
+
+rename "config/config.env.env" to "config/config.env" to your own
+
+### Install Dependencies
+
+```
+npm install
+```
+
+### Run app
+
+```
+nodemon server
+```
+
+## Frontend
+
+Frontend is provided by Open Classrooms
+
+> git repo https://github.com/OpenClassrooms-Student-Center/Web-Developer-P6.git
+
+### Install Dependencies
+
+```
+npm install
+```
+
+### Run app
+
+```
 npm start
-
-    backend: nodemon server
-
-Test account:
-test@test.test // test
-top@top.top // top
+```
