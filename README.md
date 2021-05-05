@@ -26,7 +26,7 @@ nodemon server
 
 > Frontend is provided by Open Classrooms.
 
-###If you want to access this submodule:
+### Access the submodule
 
 ```
 git clone https://github.com/OpenClassrooms-Student-Center/Web-Developer-P6.git
