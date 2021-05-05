@@ -1,6 +1,6 @@
 # Project 6: Open Classrooms
 
-Welcome to my project 6
+Welcome to this backend project
 
 > git repo: https://github.com/Pidyops/TomMoers_6_04152021_A.git
 
@@ -24,9 +24,13 @@ nodemon server
 
 ## Frontend
 
-Frontend is provided by Open Classrooms
+> Frontend is provided by Open Classrooms.
 
-> git repo https://github.com/OpenClassrooms-Student-Center/Web-Developer-P6.git
+###If you want to access this submodule:
+
+```
+git clone https://github.com/OpenClassrooms-Student-Center/Web-Developer-P6.git
+```
 
 ### Install Dependencies
 
