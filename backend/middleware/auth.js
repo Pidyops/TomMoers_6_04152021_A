@@ -11,8 +11,9 @@ module.exports = (req, res, next) => { // export our middleware
             next(); // if ok, we'll pass to the next piece of middle ware on the route
         }
      } catch {
-        res.status(401).json({
-            error: new Error('Invalid request! (token)')
-        });
+        // res.status(401).json({
+        //     error: new Error('Invalid request! (token)')
+        // });
+        return res.status(401).json({ status: 401, message: 'Invalid request! (token)'});
      }
 };
