@@ -1,6 +1,4 @@
 
-// our piece of middleware will save the image into the images folder
-
 const multer = require('multer'); //import
 
 const MIME_TYPE = {

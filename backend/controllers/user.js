@@ -51,8 +51,11 @@ exports.login = (req, res, next) => {
             if (!valid) {
                 // return res.status(401).json({ // we say return when we also want to end the function
                 // error: new Error('Incorrect password!')
-                throw ({ status: 401, code: 'Password not valid', message: 'Please, enter a correct password' });
+                
+                const err = ({ status: 401, code: 'Password not valid', message: 'Please, enter a correct password' });
                 // });
+                console.log("erreur password", err)
+                throw err
                 
             }
             const token = jwt.sign({ userId: user._id }, //sign-up mothod with the argument user id,
@@ -67,8 +70,7 @@ exports.login = (req, res, next) => {
             
         ).catch(
             (error) => {
-                console.log(error.message)
-            res.status(500).json({
+            res.status(error.status).json({
                 error: error
             });
             }
@@ -76,10 +78,16 @@ exports.login = (req, res, next) => {
         );
         }
     ).catch(
-        (error) => {
-        res.status(500).json({
-            error: error
-        });
+        
+        (error) => { if (error.code && error.code == 'Email not found') {
+        res.status(error.status).json({
+                    error: error
+                });
+        } else {
+            res.status(500).json({
+                error: error})
         }
+        
+    }
     );
 }

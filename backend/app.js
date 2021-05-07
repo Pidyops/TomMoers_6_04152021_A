@@ -24,20 +24,6 @@ connectDB();
 
 const app = express(); // create the app
 
-// <><><><><><><>  connect to Mongoose  <><><><><><><>
-// db.connect({
-// 	mongooseKey: process.env.DB_KEY,
-//   })
-
-// mongoose.connect(MONGO_URI)
-// .then(() => {
-// console.log("successfully connected to MOngoDb Atlas");
-// })
-// .catch((error) => {
-// console.log('unable to connect to MongoDB Atlas');
-// console.error(error);
-// })
-
 
 // <><><><><><><>  CORS converese localhost  <><><><><><><>
 app.use((req, res, next) => { //piece of middle-ware
@@ -54,12 +40,6 @@ app.use(bodyParser.json()); // convert the body to a usable json object
 
 // app.use(expressValidator())
 
-// app.post('/api/stuff',(req, res, next) => {
-// console.log(req.body); //get the response
-// res.status(201).json({ // give the confirmation (needed, or it will throw an error)
-// message: 'Thing created successfully!'
-// });
-// });
 
 // Sanitizing data
 app.use(mongoSanitize());

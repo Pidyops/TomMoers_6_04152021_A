@@ -167,10 +167,6 @@ exports.modifySauce = (req, res, next) => {
         mainPepper: req.body.sauce.mainPepper,
         imageUrl: url + '/images/' + req.file.filename,
         heat: req.body.sauce.heat,
-        // likes: req.body.sauce.likes,
-        // dislikes: req.body.sauce.dislikes,
-        // usersLiked: req.body.sauce.usersLiked,
-        // usersDisliked: req.body.sauce.usersDisliked,
     };
     // console.log(sauce)
     console.log("put: if part")
@@ -187,10 +183,6 @@ exports.modifySauce = (req, res, next) => {
       description: req.body.description,
       mainPepper: req.body.mainPepper,
       heat: req.body.heat,
-      // likes: req.body.likes,
-      // dislikes: req.body.dislikes,
-      // usersLiked: req.body.usersLiked,
-      // usersDisliked: req.body.usersDisliked,
     };
       console.log("put: else part");
       console.log("sauce:", sauce);
